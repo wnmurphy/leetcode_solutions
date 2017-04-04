@@ -30,7 +30,7 @@ var twoSumBruteForce = function(nums, target) {
 // Instead of nesting loops, we can have two separate passes of a storage hash table.
 // This solution only works if there are no repeating values in the array; to get a constant time lookup the numbers can only be stored as keys, and keys must be unique.
 // Another limitation of this solution is that, since there is no way to enforce iteration order over an object's keys, there is no way to enforce the order of array indices returned in the result tuple.
-var twoSum = function (nums, target) {
+var twoSumTwoPass = function (nums, target) {
   var numbers = {}, complement, result;
   // First we map the numbers/indices in the array to an object as key-value pairs.
   // [2, 7, 11, 15]
@@ -55,4 +55,26 @@ var twoSum = function (nums, target) {
     }
   }
   return result;
+};
+
+// We can further improve efficiency by checking for the target's complement as we map the array to the hash table, just before we add each value.
+// If we find it, we can break early. and return the resulting indices.
+var twoSumOnePass = function (nums, target) {
+  var numbers = {}, complement, result;
+  nums.map(function(num, idx){
+    numbers[num] = idx; 
+    // { 
+    //  "2": 0,
+    //  "7": 1, 
+    //  "11": 2, 
+    //  "15": 3 
+    // }
+  });
+  for (var i = 0; i < nums.length; i++) {
+    complement = target - nums[i];
+    if (complement in numbers) {
+      return [ numbers[complement], numbers[ nums[i] ] ];
+    }
+    numbers[ nums[i] ] = i;
+  }
 };
